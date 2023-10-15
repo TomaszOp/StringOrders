@@ -34,7 +34,10 @@ cmd.Add(order4,
                 );
 <br>
 char * ret= cmd.Run(order1, argc, argv);
+<br>
 cmd.Run(order2, argc, argv);
+<br>
 char * ret= cmd.Run(order3);
+<br>
 cmd.Run(order4);
 <br>
