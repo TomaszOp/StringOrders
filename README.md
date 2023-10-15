@@ -7,17 +7,34 @@ You can build a list of commands of the string + function type that is associate
 <br>
 StringCommand cmd;
 <br>
-cmd.Add(order, [](int argc, char **argv) -> char * {
-                  return ???;
+cmd.Add(order1, [](int argc, char **argv) -> char * {
+                  return char *;
                   }
                   ,help);
 <br>
-cmd.Add(orderVoid, 
+cmd.Add(order2, 
                 [](int argc, char **argv) -> void {
                        ;
                     },
                 help
                 );
 <br>
-cmd.Run(order, argc, argv);
+cmd.Add(order3, 
+                []() -> void {
+                    return char *;
+                    },
+                help
+                );
+<br>
+cmd.Add(order4, 
+                []() -> void {
+                    ;
+                    },
+                help
+                );
+<br>
+char * ret= cmd.Run(order1, argc, argv);
+cmd.Run(order2, argc, argv);
+char * ret= cmd.Run(order3);
+cmd.Run(order4);
 <br>
