@@ -8,19 +8,21 @@ You can build a list of commands of the string + function type that is associate
 StringCommand cmd;
 <br>
 cmd.Add(order1, [](int argc, char **argv) -> char * {
+                  ;;;
                   return char *;
                   }
                   ,help);
 <br>
 cmd.Add(order2, 
                 [](int argc, char **argv) -> void {
-                       ;
+                    ;;;
                     },
                 help
                 );
 <br>
 cmd.Add(order3, 
                 []() -> void {
+                    ;;;
                     return char *;
                     },
                 help
@@ -28,7 +30,7 @@ cmd.Add(order3,
 <br>
 cmd.Add(order4, 
                 []() -> void {
-                    ;
+                    ;;;
                     },
                 help
                 );
