@@ -30,7 +30,7 @@ bool StringCommand::AddCommand(char * order,  char * (*func)(int argc, char *arg
     Commands[countCommands].func = func;
     Commands[countCommands].Help = help;
 
-    countCommands = 1;
+    countCommands++;
     
     return true;
 }
@@ -55,7 +55,7 @@ bool StringCommand::AddCommandNoParam(char * order, char * (*func)(), char* help
     CommandsNoParam[countCommandsNoParam].func = func;
     CommandsNoParam[countCommandsNoParam].Help = help;
 
-    countCommandsNoParam = 1;   
+    countCommandsNoParam++;   
 
     return true;
 }
@@ -80,7 +80,7 @@ bool StringCommand::AddCommandVoid(char * order, void (*func)(int argc, char *ar
     CommandsVoid[countCommandsVoid].func = func;
     CommandsVoid[countCommandsVoid].Help = help;
 
-    countCommandsVoid = 1; 
+    countCommandsVoid++; 
 
     return true;
 }
@@ -105,7 +105,7 @@ bool StringCommand::AddCommandVoidNoParam(char * order, void (*func)(), char* he
     CommandsVoidNoParam[countCommandsVoidNoParam].func = func;
     CommandsVoidNoParam[countCommandsVoidNoParam].Help = help;
 
-    countCommandsVoidNoParam = 1; 
+    countCommandsVoidNoParam++; 
 
     return true;
 }
@@ -240,16 +240,16 @@ void StringCommand::RunCommandVoid(char * order)
 
 char * StringCommand::Run(char * order, int argc, char *argv[])
 {
-    int orderPoz = 0;
+    int position = -1;
 
-    if(ExistCommand(order, 0))
+    if(ExistCommand(order, 0, position))
     {
-        return Commands[orderPoz].Run(argc, argv);
+        return Commands[position].Run(argc, argv);
     }
 
-    if(ExistCommand(order, 2))
+    if(ExistCommand(order, 2, position))
     {
-        CommandsVoid[orderPoz].Run(argc, argv);
+        CommandsVoid[position].Run(argc, argv);
         return nullptr;
     }
 
@@ -258,27 +258,32 @@ char * StringCommand::Run(char * order, int argc, char *argv[])
 
 char * StringCommand::Run(char * order)
 {
-    int orderPoz = 0;
+    int position = -1;
 
-    if(ExistCommand(order, 1))
+    if(ExistCommand(order, 1, position))
     {
-        return CommandsNoParam[orderPoz].Run();
+        return CommandsNoParam[position].Run();
     }
 
-    if(ExistCommand(order, 3))
+    if(ExistCommand(order, 3, position))
     {
-        CommandsVoidNoParam[orderPoz].Run();
+        CommandsVoidNoParam[position].Run();
         return nullptr;
     }
 
     return nullptr;
 }
 
-
-
 bool StringCommand::ExistCommand(char * order, int mode)
 {
+    int position;
+    return ExistCommand(order, mode, position);
+}
+
+bool StringCommand::ExistCommand(char * order, int mode, int & position)
+{
     int orderPoz = 0;
+    position = -1;
 
     if(mode == 0)
     {
@@ -286,6 +291,7 @@ bool StringCommand::ExistCommand(char * order, int mode)
         {
             if(strcmp(order, Commands[orderPoz].Order) == 0)
             {
+                position = orderPoz;
                 return true;
             }
         }
@@ -296,6 +302,7 @@ bool StringCommand::ExistCommand(char * order, int mode)
         {
             if(strcmp(order, CommandsNoParam[orderPoz].Order) == 0)
             {
+                position = orderPoz;
                 return true;
             }
         }
@@ -306,6 +313,7 @@ bool StringCommand::ExistCommand(char * order, int mode)
         {
             if(strcmp(order, CommandsVoid[orderPoz].Order) == 0)
             {
+                position = orderPoz;
                 return true;
             }
         }
@@ -316,6 +324,7 @@ bool StringCommand::ExistCommand(char * order, int mode)
         {
             if(strcmp(order, CommandsVoidNoParam[orderPoz].Order) == 0)
             {
+                position = orderPoz;
                 return true;
             }
         }
@@ -324,3 +333,40 @@ bool StringCommand::ExistCommand(char * order, int mode)
     return false;
 }
 
+char ** StringCommand::GetOrders(int & argc)
+{
+    argc = countCommands + countCommandsNoParam + countCommandsVoid + countCommandsVoidNoParam;
+
+    if(argc == 0)
+        return NULL;
+
+    char ** argv = (char **)malloc(sizeof(char *) * (argc));
+
+    int nr=0;
+
+    for (int i = 0; i < countCommands; i++)
+    {
+        argv[nr] = Commands[i].Order;
+        nr++;
+    }
+    
+    for (int i = 0; i < countCommandsNoParam; i++)
+    {
+        argv[nr] = CommandsNoParam[i].Order;
+        nr++;
+    }
+
+    for (int i = 0; i < countCommandsVoid; i++)
+    {
+        argv[nr] = CommandsVoid[i].Order;
+        nr++;
+    }
+
+    for (int i = 0; i < countCommandsVoidNoParam; i++)
+    {
+        argv[nr] = CommandsVoidNoParam[i].Order;
+        nr++;
+    }
+
+    return argv;
+}

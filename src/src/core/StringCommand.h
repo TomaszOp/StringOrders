@@ -37,8 +37,12 @@ public:
 	bool Add(char * order, void (*func)(), char* help);
 
 
+
+
 	char * Run(char * order, int argc, char *argv[]);
 	char * Run(char * order);
+
+	char ** GetOrders(int & argc);
 
 
 private:
@@ -55,6 +59,7 @@ private:
 	CommandVoidNoParam * CommandsVoidNoParam;
 	int countCommandsVoidNoParam;
 
+	bool ExistCommand(char * order, int mode, int & position);
 	bool ExistCommand(char * order, int mode);
 
 };
